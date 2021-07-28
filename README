@@ -1,0 +1,7 @@
+== Tic Tac Toe ==
+
+Kindergarten implementation of tic tac toe in python
+
+# representation 
+because `0` looks like `o` or `O` i'll represent O's as -1 and X's as 1, 0 means empty square
+
