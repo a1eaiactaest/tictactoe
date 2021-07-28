@@ -9,14 +9,23 @@ from math import sqrt
 
 board = [0,0,0,0,0,0,0,0,0]
 
-class Board:
-  def __init__(self, state):
-    pass 
 
-def display(arr:'list', n:'int') -> 'list':
-  key = int(sqrt(n))
-  for i in range(0, n, key):
-    #print(i)
-    print(arr[i:i+key])
+class Board():
+  def __init__(self, state=None):
+    if state is None:
+      self.reset_state()
+    else:
+      self.state = state
 
-display(board, len(board))
+  def reset_state(self):
+    self.state = [0]*10
+    
+  def display(self, arr:'list', space:'int') -> 'list':
+    key = int(sqrt(space))
+    for i in range(0, space, key):
+      print(arr[i:i+key])
+
+
+if __name__ == "__main__":
+  b = Board()
+  print(b.state)
