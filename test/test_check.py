@@ -4,8 +4,20 @@ import unittest
 from triplet import Board
 
 class TestGameState(unittest.TestCase):
-  def test_over(self):
+  def test_over_column(self):
     test_b = Board([1, 0, 0, 1, -1, 0, 1, 0, -1, -1])
+    res, _ = test_b.is_game_over()
+    self.assertEqual(res, True)
+    del test_b, res
+
+  def test_over_row(self):
+    test_b = Board([-1, -1, -1, 1, 0, 1, 0, 1, 0, -1])
+    res, _ = test_b.is_game_over()
+    self.assertEqual(res, True)
+    del test_b, res
+
+  def test_over_diagonal(self):
+    test_b = Board([-1, 1, 0, 1, -1, 1, 0, 0, -1, -1])
     res, _ = test_b.is_game_over()
     self.assertEqual(res, True)
     del test_b, res
@@ -17,7 +29,10 @@ class TestGameState(unittest.TestCase):
     del test_b, res
 
   def test_draw(self):
-    pass
+    test_b = Board([-1, -1, 1, 1, 1, -1, -1, 1, 1, -1])
+    res, _ = test_b.is_game_over()
+    self.assertEqual(res, 'draw')
+    del test_b, res
 
 if __name__ == "__main__":
   unittest.main()

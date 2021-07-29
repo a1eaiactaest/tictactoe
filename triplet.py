@@ -32,18 +32,38 @@ class Board():
     print("turn: %d" % self.state[-1])
     print(np.array(self.state[0:9]).reshape(3,3)) 
 
-  def is_game_over(self):
+  def is_game_over(self, s=None):
+    if s is None:
+      s = self.state
+    if all(x!=0 for x in s[0:9]):
+      return 'draw', s[-1]
     # check columns 
     for i in range(3):
       ret = 0 
       for j in range(0, 9, 3):
-        if self.state[j] == self.state[-1]*-1:
+        if s[j] == s[-1]*-1:
           ret += 1
       if ret == 3:
-          return True, self.state[-1]
+        return True, s[-1]
       else:
         continue
-    return False, self.state[-1]
+    #return False, self.state[-1]
+
+    # check rows
+    for i in range(0, 9, 3): 
+      #print([x for x in s[i:i+3]])
+      if all([x==s[-1] for x in s[i:i+3]]):
+        return True, s[-1] 
+      else:
+        continue
+    
+    # check diagonals
+    if all([x==s[-1] for x in [s[0], s[4], s[8]]]):
+      return True, s[-1]
+    elif all([x==s[-1] for x in [s[2], s[4], s[6]]]):
+      return True, s[-1]
+
+    return False, s[-1]
 
   def make_move(self, move):
     m = self.move_space.get(move)  
@@ -55,20 +75,12 @@ class Board():
     # if -1 change to 1, if 1 change to -1
     self.state[-1] *= -1 
     self.render_board()
-    print(self.is_game_over())
+    print(self.is_game_over(self.state))
     return self.state
  
 if __name__ == "__main__":
-  b = Board() 
-  print("s ", b.state)
-  print(b.make_move('a1'))
-  print(b.make_move('b2'))
-  print(b.make_move('b1'))
-  print(b.make_move('c3'))
-  print(b.make_move('c1'))
-  """
   #test_state = [0]*9+[1]
-  test_state = [1, 0, 0, 1, -1, 0, 1, 0, -1, -1]
+  test_state = [-1,1,0,1,-1,1,0,0,-1,-1]
   b = Board(test_state)
+  b.render_board()
   print(b.is_game_over())
-  """

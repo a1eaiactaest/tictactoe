@@ -33,5 +33,6 @@ if testing run `python3 -m pytest -v` from home directory, otherwise won't work.
 == todo == 
 
 * check for wins in rows
+* check for wins in diagonals
 * check for draws
 * wiret test for both of those things
