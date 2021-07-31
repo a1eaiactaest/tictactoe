@@ -28,6 +28,14 @@ class TestGameState(unittest.TestCase):
     self.assertEqual(res, False)
     del test_b, res
 
+  def test_illegal_move(self):
+    test_b = Board([0]*9+[1])
+    test_b.make_move('a1')
+    # Illegal move to occupied square
+    _ , res = test_b.make_move('a1')
+    self.assertEqual(res, True)
+    del test_b, res
+
   def test_draw(self):
     test_b = Board([-1, -1, 1, 1, 1, -1, -1, 1, 1, -1])
     res, _ = test_b.is_game_over()

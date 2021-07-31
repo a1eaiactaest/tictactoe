@@ -66,21 +66,48 @@ class Board():
     return False, s[-1]
 
   def make_move(self, move):
-    m = self.move_space.get(move)  
-    if self.state[-1] == -1:
-      self.state[m] = -1
-    elif self.state[-1] == 1:
-      self.state[m] = 1
+    s = self.state
+    print(type(move))
+    if type(move) is not int:
+      m = self.move_space.get(move)  
+    else:
+      m = move
+    #print(m)
+    # ILLEGAL MOVE, OPPONENT WINS
+    if s[m] != 0:
+      self.render_board()
+      s[-1] *= -1
+      print('Illegal move to %s by %d, %d wins' % (move, s[-1]*-1, s[-1]))
+      return s, True 
+    if s[-1] == -1:
+      s[m] = -1
+    elif s[-1] == 1:
+      s[m] = 1
 
     # if -1 change to 1, if 1 change to -1
-    self.state[-1] *= -1 
     self.render_board()
-    print(self.is_game_over(self.state))
-    return self.state
+    s[-1] *= -1 
+    return s, self.is_game_over()
  
 if __name__ == "__main__":
   #test_state = [0]*9+[1]
+  """
   test_state = [-1,1,0,1,-1,1,0,0,-1,-1]
   b = Board(test_state)
   b.render_board()
   print(b.is_game_over())
+  """
+  t = Board()
+  #print(t.make_move('a1'))
+  #print(t.make_move('a1'))
+  #print('state: ', t.state)
+  #t.render_board()
+  done = False
+  while not done:
+    b = t.state[0:9]
+    m = int(np.random.choice(len(b)))
+    try:
+      _, (done, _) = t.make_move(m)
+    except TypeError:
+      break
+    
