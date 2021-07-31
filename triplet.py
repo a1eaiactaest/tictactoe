@@ -47,11 +47,9 @@ class Board():
         return True, s[-1]
       else:
         continue
-    #return False, self.state[-1]
 
     # check rows
     for i in range(0, 9, 3): 
-      #print([x for x in s[i:i+3]])
       if all([x==s[-1] for x in s[i:i+3]]):
         return True, s[-1] 
       else:
@@ -67,12 +65,10 @@ class Board():
 
   def make_move(self, move):
     s = self.state
-    print(type(move))
     if type(move) is not int:
       m = self.move_space.get(move)  
     else:
       m = move
-    #print(m)
     # ILLEGAL MOVE, OPPONENT WINS
     if s[m] != 0:
       self.render_board()
@@ -90,18 +86,7 @@ class Board():
     return s, self.is_game_over()
  
 if __name__ == "__main__":
-  #test_state = [0]*9+[1]
-  """
-  test_state = [-1,1,0,1,-1,1,0,0,-1,-1]
-  b = Board(test_state)
-  b.render_board()
-  print(b.is_game_over())
-  """
   t = Board()
-  #print(t.make_move('a1'))
-  #print(t.make_move('a1'))
-  #print('state: ', t.state)
-  #t.render_board()
   done = False
   while not done:
     b = t.state[0:9]
