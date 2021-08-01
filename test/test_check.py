@@ -42,5 +42,20 @@ class TestGameState(unittest.TestCase):
     self.assertEqual(res, 'draw')
     del test_b, res
 
+  def test_over_1(self):
+    test_b = Board([-1, 1, 1, -1, -1, 0, -1, 1, 1, 1])
+    res, w = test_b.is_game_over()
+    self.assertEqual(res, True)
+    self.assertEqual(w, -1)
+    del test_b, res, w
+
+  def test_over_2(self):
+    # diagonal, True, -1
+    test_b = Board([-1, 1, 1, -1, -1, 0, 1, 1, -1, 1])
+    res, w = test_b.is_game_over()
+    self.assertEqual(res, True)
+    self.assertEqual(w, -1)
+    del test_b, res, w
+
 if __name__ == "__main__":
   unittest.main()

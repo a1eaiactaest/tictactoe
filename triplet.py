@@ -32,36 +32,47 @@ class Board():
     print("turn: %d" % self.state[-1])
     print(np.array(self.state[0:9]).reshape(3,3)) 
 
+  def legal_moves(self):
+    turn = self.state[-1]
+    s = self.state[0:9]
+    ret = []
+    for i, j in enumerate(s):
+      if j == 0:
+        ret.append(i)
+    chret = [self.mb[x] for x in ret]
+    return ret, chret
+
   def is_game_over(self, s=None):
     if s is None:
       s = self.state
-    if all(x!=0 for x in s[0:9]):
-      return 'draw', s[-1]
-    # check columns 
-    for i in range(3):
-      ret = 0 
-      for j in range(0, 9, 3):
-        if s[j] == s[-1]*-1:
-          ret += 1
-      if ret == 3:
-        return True, s[-1]
-      else:
-        continue
+    for turn in [-1,1]:
+      if all(x!=0 for x in s[0:9]):
+        return 'draw', turn
+      # check columns 
+      for i in range(3):
+        ret = 0 
+        for j in range(0, 9, 3):
+          if s[j] == turn:
+            ret += 1
+        if ret == 3:
+          return True, turn
+        else:
+          continue
 
-    # check rows
-    for i in range(0, 9, 3): 
-      if all([x==s[-1] for x in s[i:i+3]]):
-        return True, s[-1] 
-      else:
-        continue
-    
-    # check diagonals
-    if all([x==s[-1] for x in [s[0], s[4], s[8]]]):
-      return True, s[-1]
-    elif all([x==s[-1] for x in [s[2], s[4], s[6]]]):
-      return True, s[-1]
+      # check rows
+      for i in range(0, 9, 3): 
+        if all([x==turn for x in s[i:i+3]]):
+          return True, turn
+        else:
+          continue
+      
+      # check diagonals
+      if all([x==turn for x in [s[0], s[4], s[8]]]):
+        return True, turn
+      elif all([x==turn for x in [s[2], s[4], s[6]]]):
+        return True, turn
 
-    return False, s[-1]
+    return False, turn
 
   def make_move(self, move):
     s = self.state
@@ -84,15 +95,25 @@ class Board():
     self.render_board()
     s[-1] *= -1 
     return s, self.is_game_over()
- 
-if __name__ == "__main__":
-  t = Board()
+
+
+def random_game(state=None):
+  if state == None:
+    state = [0]*9+[1]
+
+  b = Board(state)
   done = False
   while not done:
-    b = t.state[0:9]
-    m = int(np.random.choice(len(b)))
-    try:
-      _, (done, _) = t.make_move(m)
-    except TypeError:
-      break
-    
+    _, moves = b.legal_moves()
+    move = np.random.choice(moves, 1)
+    print('\n', move)
+    s, (d, w) = b.make_move(move[0])
+    print(s,d,w)
+    done = d
+ 
+if __name__ == "__main__":
+  #random_game()
+  b = Board([-1, 1, -1, -1, 1, 0, 1, 1, -1, -1])
+  #b = Board([1, 0, 0, 1, -1, 0, 1, 0, -1, -1])
+  b.render_board()
+  print(b.is_game_over())
