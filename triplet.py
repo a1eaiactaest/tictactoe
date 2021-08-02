@@ -50,11 +50,7 @@ class Board():
         return 'draw', turn
       # check columns 
       for i in range(3):
-        ret = 0 
-        for j in range(0, 9, 3):
-          if s[j] == turn:
-            ret += 1
-        if ret == 3:
+        if all([x==turn for x in [s[i], s[i+3], s[i+6]]]):
           return True, turn
         else:
           continue
