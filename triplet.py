@@ -9,25 +9,26 @@ DEBUG = os.getenv("DEBUG", None) is not None
 # assume that board is always 3x3
 class Board():
   mb = ['a1','a2','a3','b1','b2','b3','c1','c2','c3']
-  def __init__(self, state=None):
+  def __init__(self, state=None) -> None:
     if state is None:
       self.reset_state()
     else:
       self.state = state
     self.move_space = dict((m,n) for n,m in enumerate(self.mb))
 
-  def reset_state(self):
+  def reset_state(self) -> None:
     if DEBUG:
       self.state = [i for i in range(9)]+[1]
     else:
       self.state = [0]*9+[1]
     
   # return state in 2d
-  def render_board(self):
+  def render_board(self) -> None:
     print("turn: %d" % self.state[-1])
     print(np.array(self.state[0:9]).reshape(3,3)) 
 
-  def legal_moves(self):
+  def legal_moves(self) -> list[list[int], list[str]]:
+    if self.is_game_over(): return [], []
     turn = self.state[-1]
     s = self.state[0:9]
     ret = []
@@ -37,7 +38,7 @@ class Board():
     chret = [self.mb[x] for x in ret]
     return ret, chret
 
-  def is_game_over(self, s=None):
+  def is_game_over(self, s=None) -> tuple[bool, int]:
     if s is None:
       s = self.state
     for turn in [-1,1]:
@@ -65,7 +66,7 @@ class Board():
 
     return False, turn
 
-  def make_move(self, move):
+  def make_move(self, move) -> tuple[int, bool]:
     s = self.state
     if type(move) is not int:
       m = self.move_space.get(move)  
@@ -88,7 +89,7 @@ class Board():
     return s, self.is_game_over()
 
 
-def random_game(state=None):
+def random_game(state=None) -> None:
   if state == None:
     state = [0]*9+[1]
 
@@ -107,4 +108,5 @@ if __name__ == "__main__":
   b = Board([-1, 1, -1, -1, 1, 0, 1, 1, -1, -1])
   #b = Board([1, 0, 0, 1, -1, 0, 1, 0, -1, -1])
   b.render_board()
+  print(b.legal_moves())
   print(b.is_game_over())
