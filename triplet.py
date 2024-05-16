@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
 
-"""
-
-a kirdengarten implementation of tictactoe in python written while listening to great music
-
-"""
 import os
 from math import sqrt
 import numpy as np
