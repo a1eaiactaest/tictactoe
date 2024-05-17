@@ -89,19 +89,6 @@ class Board():
     return s, self.is_game_over()
 
 
-def random_game(state=None) -> None:
-  if state == None:
-    state = [0]*9+[1]
-
-  b = Board(state)
-  done = False
-  while not done:
-    _, moves = b.legal_moves()
-    move = np.random.choice(moves, 1)
-    print('\n', move)
-    s, (d, w) = b.make_move(move[0])
-    print(s,d,w)
-    done = d
  
 if __name__ == "__main__":
   #random_game()
