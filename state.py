@@ -30,4 +30,5 @@ class State:
     if not game over
       return (False, 0) as nobody has won
     '''
+    raise NotImplementedError
 
