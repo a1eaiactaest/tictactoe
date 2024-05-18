@@ -14,14 +14,28 @@ class State:
   '''
   def __init__(self, state:Optional[list[int]]=None) -> None:
     self.state = state
+    self.embed_state = state[0:9]
     self.current_player = state[-1] if state else 1
 
-  def legal_moves(self) -> tuple[str]:
+  def legal_moves(self) -> Optional[list[str]]:
     '''
     given the current state and the current player (state[-1]),
     return possible moves for that player
     '''
-    raise NotImplementedError
+    if self.is_game_over()[0]:
+      return None
+    moves_indicies = []
+    for i, j in enumerate(self.embed_state):
+      if j == 0:
+        moves_indicies.append(i)
+    moves = list(map(self.index_to_move, moves_indicies))
+    return moves
+
+    
+  def index_to_move(self, index:int) -> str:
+    mmap = ['a1','a2','a3','b1','b2','b3','c1','c2','c3']
+    return mmap[index]
+    
   
   def is_game_over(self) -> tuple[bool, int]:
     '''
