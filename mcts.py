@@ -2,14 +2,15 @@
 
 import random
 import numpy as np
+from typing import Optional
 
 from state import State
 
 
 class Node:
-    def __init__(self, state: State, parent: "Node" = None):
+    def __init__(self, state: State, parent: Optional["Node"] = None):
         self.state: State = state
-        self.parent: Node = parent
+        self.parent = parent
         self.children = {}
         self.visits = 0
         self.value = 0
@@ -18,7 +19,7 @@ class Node:
         return len(self.children) == 0
 
     def uct(self) -> float:
-        if self.visits == 0:
+        if self.visits == 0 or self.parent is None:
             return float("inf")
         return (self.value / self.visits) + 2 * np.sqrt(
             np.log(self.parent.visits) / self.visits
@@ -34,7 +35,7 @@ class MCTS:
             node = self._tree_policy()
             reward = self._default_policy(node.state)
             self._backpropagate(node, reward)
-        return self._best_child(self.root, 0).state
+        return self._best_child(self.root)
 
     def _tree_policy(self) -> Node:
         node = self.root
@@ -42,16 +43,35 @@ class MCTS:
             if node.is_leaf():
                 return self._expand(node)
             else:
-                node = self._best_child(node, 2)
+                node = node.children[self._best_child(node)]
         return node
 
     def _expand(self, node: Node) -> Node:
         available_moves = node.state.legal_moves()
+        if available_moves is None:
+            return node
         random_move = random.choice(available_moves)
         new_state = node.state.apply_move(random_move)
         child_node = Node(new_state, node)
         node.children[random_move] = child_node
         return child_node
 
-    def _best_child(self, node: Node) -> Node:
-        return max(node.children.values(), key=lambda child_node: child_node.uct())
+    def _best_child(self, node: Node) -> str:
+        return max(node.children, key=lambda k: node.children[k].uct())
+
+    def _default_policy(self, state: State) -> int:
+        current_state = state
+        while not current_state.is_game_over()[0]:
+            available_moves = current_state.legal_moves()
+            if available_moves is None:
+                return state.state[-1]
+            random_move = random.choice(available_moves)
+            current_state = current_state.apply_move(random_move)
+        return current_state.is_game_over()[1]
+
+    def _backpropagate(self, node: Node, reward: int) -> None:
+        while node is not None and node.parent is not None:
+            node.visits += 1
+            node.value += reward
+            node = node.parent
+            reward *= -1
