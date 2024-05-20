@@ -51,6 +51,7 @@ class State:
         new_state[-1] *= -1  # change player
         return State(new_state)
 
+    # TODO: bench this
     def is_game_over(self) -> tuple[bool, int]:
         """
         if game over
@@ -58,4 +59,26 @@ class State:
         if not game over
           return (False, 0) as nobody has won
         """
-        raise NotImplementedError
+        s = self.embed_state
+        for turn in [-1, 1]:
+            if all(x != 0 for x in s):
+                return True, 0
+            # check columns
+            for i in range(3):
+                if all([x == turn for x in [s[i], s[i + 3], s[i + 6]]]):
+                    return True, turn
+                else:
+                    continue
+            # check rows
+            for i in range(0, 9, 3):
+                if all([x == turn for x in s[i : i + 3]]):
+                    return True, turn
+                else:
+                    continue
+
+            # check diagonals
+            if all([x == turn for x in [s[0], s[4], s[8]]]):
+                return True, turn
+            if all([x == turn for x in [s[2], s[4], s[6]]]):
+                return True, turn
+        return False, self.current_player
