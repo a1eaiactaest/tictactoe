@@ -15,6 +15,8 @@ class Node:
         self.visits = 0
         self.value = 0
 
+        self.uct = float("inf")
+
         # prevent division by zero, is this the right fix?
         if self.parent is not None and self.parent.visits == 0:
             self.parent.visits = 1
@@ -22,12 +24,15 @@ class Node:
     def is_leaf(self) -> bool:
         return len(self.children) == 0
 
-    def uct(self) -> float:
-        if self.visits == 0 or self.parent is None:
-            return float("inf")
-        return (self.value / self.visits) + 2 * math.sqrt(
-            math.log(self.parent.visits) / self.visits
-        )
+    def update_uct(self) -> None:
+        if self.visits == 0:
+            self.uct = float("inf")
+        elif self.parent is None:
+            self.uct = float("inf")
+        else:
+            self.uct = (self.value / self.visits) + 2 * math.sqrt(
+                math.log(self.parent.visits) / self.visits
+            )
 
 
 class MCTS:
