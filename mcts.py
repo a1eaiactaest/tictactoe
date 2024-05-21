@@ -9,7 +9,7 @@ from state import State
 
 class Node:
     def __init__(self, state: State, parent: Optional["Node"] = None):
-        self.state: State = state
+        self.state = state
         self.parent = parent
         self.children = {}
         self.visits = 0
