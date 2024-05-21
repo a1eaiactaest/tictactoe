@@ -35,7 +35,7 @@ class Timing(contextlib.ContextDecorator):
         self.t = et - self.st
         if self.enabled:
             print(
-                f"{self.prefix}{self.t*1e-6:6.2} ms"
+                f"{self.prefix}{self.t*1e-6} ms"
                 + (self.on_exit(self.t) if self.on_exit else "")
             )
 
