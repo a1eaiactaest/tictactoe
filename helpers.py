@@ -30,7 +30,7 @@ class Timing(contextlib.ContextDecorator):
     def __enter__(self) -> None:
         self.st = time.perf_counter_ns()
 
-    def __exit__(self) -> None:
+    def __exit__(self, *exc):
         et = time.perf_counter_ns()
         self.t = et - self.st
         if self.enabled:
