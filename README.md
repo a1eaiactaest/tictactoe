@@ -1,19 +1,20 @@
-== Tic Tac Toe ==
+# TicTacToe
 
-Kindergarten implementation of tictactoe in python
+Kindergarten implementation of tictactoe in Python with 
 
-# representation 
+## State Representation 
 state is 9 zeros + 1 zero which tells whose turn it is
 
 because `0` looks like `o` or `O` i'll represent O's as -1 and X's as 1, 0 means empty square
 
-# move input
+### Moves
 should taken move be `a1` in context of board that is `c` characters on 3 characters long?
 
 or 
 
-inputs in range 0-8
+as an input in range of `0-8`
 
+```
     1   2   3
 
 a  a1, a2, a3
@@ -21,16 +22,19 @@ a  a1, a2, a3
 b  b1, b2, b3
 
 c  c1, c2, c3
+```
 
-by enumerating this we can get this
+by enumerating this we get:
 
+```
 [(0, 'a1'), (1, 'a2'), (2, 'a3'), (3, 'b1'), (4, 'b2'), (5, 'b3'), (6, 'c1'), (7, 'c2'), (8, 'c3')]
+```
 
-== Testing ==
+## Testing
 
 if testing run `python3 -m pytest -v` from home directory, otherwise won't work.
 
-== todo == 
+## TODO
 
 * ~~check for wins in rows~~
 * ~~check for wins in diagonals~~
