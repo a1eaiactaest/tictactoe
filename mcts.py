@@ -34,6 +34,10 @@ class Node:
                 math.log(self.parent.visits) / self.visits
             )
 
+    def add_child(self, move: str, child_node: "Node") -> None:
+        self.children[move] = child_node
+        child_node.parent = self
+
 
 class MCTS:
     def __init__(self, state: State) -> None:
