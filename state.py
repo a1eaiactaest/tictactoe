@@ -28,11 +28,8 @@ class State:
         """
         if self.is_game_over()[0]:
             return None
-        moves_indicies = []
-        for i, j in enumerate(self.embed_state):
-            if j == 0:
-                moves_indicies.append(i)
-        moves = list(map(self.index_to_move, moves_indicies))
+        moves_indicies = [i for i, x in enumerate(self.embed_state) if x == 0]
+        moves = [self.mmap[i] for i in moves_indicies]
         return moves
 
     def index_to_move(self, index: int) -> str:
